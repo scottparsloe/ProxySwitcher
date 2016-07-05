@@ -14,5 +14,8 @@
         <Label Content="Example: Bla bla" Height="28" HorizontalAlignment="Left" Margin="22,118,0,0" Name="labelExample" VerticalAlignment="Top" />
         <CheckBox Content="{x:Static res:DefaultResources.WithParameterName_Checkbox}" Height="16" HorizontalAlignment="Left" Margin="37,96,0,0" Name="checkBoxWithParameterName" VerticalAlignment="Top" Width="251" IsEnabled="{Binding ElementName=checkBoxWithParameter, Path=IsChecked}" Checked="checkBox_Checked" Unchecked="checkBox_Checked" />
         <CheckBox Content="{x:Static res:DefaultResources.ExecuteScript_RunAsAdmin_Checkbox}" Height="16" HorizontalAlignment="Left" Margin="22,152,0,0" Name="checkBoxRunAsAdmin" VerticalAlignment="Top" />
+        <ComboBox Name="comboBoxWindow" HorizontalAlignment="Left" Margin="83,187,0,0" VerticalAlignment="Top" Width="243" Height="22" VerticalContentAlignment="Center">
+        </ComboBox>
+        <Label Name="labelWindow" Content="{x:Static res:DefaultResources.ExecuteScript_Window_Label}" HorizontalAlignment="Left" Margin="22,186,0,0" VerticalAlignment="Top" Width="56"/>
     </Grid>
 </UserControl>

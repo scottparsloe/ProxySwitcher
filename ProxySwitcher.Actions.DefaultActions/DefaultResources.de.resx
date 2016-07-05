@@ -216,4 +216,19 @@
   <data name="ExecuteScript_RunAsAdmin_Checkbox" xml:space="preserve">
     <value>Als Administrator ausführen (zeigt einen UAC Prompt)</value>
   </data>
+  <data name="ExecuteScript_Window_Label" xml:space="preserve">
+    <value>Fenster:</value>
+  </data>
+  <data name="ExecuteScript_Window_Hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="ExecuteScript_Window_Maximized" xml:space="preserve">
+    <value>Maximized</value>
+  </data>
+  <data name="ExecuteScript_Window_Minimized" xml:space="preserve">
+    <value>Minimized</value>
+  </data>
+  <data name="ExecuteScript_Window_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
 </root>

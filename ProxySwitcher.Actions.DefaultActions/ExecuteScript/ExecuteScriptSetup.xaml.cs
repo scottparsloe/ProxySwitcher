@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
 {
@@ -41,6 +42,11 @@ namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
             checkBoxWithParameterName.IsChecked = withParameterNameInsteadOfId;
             checkBoxRunAsAdmin.IsChecked = runAsAdmin;
 
+            comboBoxWindow.DisplayMemberPath = "Value";
+            comboBoxWindow.SelectedValuePath = "Value";
+            comboBoxWindow.ItemsSource = executeScriptAction.GetWindowStyles();
+            comboBoxWindow.SelectedItem = executeScriptAction.GetActiveWindowStyle(networkId);
+
             UpdateExampleText();
         }
 
@@ -56,7 +62,7 @@ namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            this.executeScriptAction.Save(this.networkId, textBoxScript.Text, checkBoxWithParameter.IsChecked.Value, checkBoxWithParameterName.IsChecked.Value, checkBoxRunAsAdmin.IsChecked.Value);
+            this.executeScriptAction.Save(this.networkId, textBoxScript.Text, checkBoxWithParameter.IsChecked.Value, checkBoxWithParameterName.IsChecked.Value, checkBoxRunAsAdmin.IsChecked.Value, ((KeyValuePair<int, string>)comboBoxWindow.SelectedItem).Key);
         }
 
         private void buttonBrowse_Click(object sender, RoutedEventArgs e)

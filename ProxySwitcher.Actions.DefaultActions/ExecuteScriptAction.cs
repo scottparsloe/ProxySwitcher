@@ -37,6 +37,30 @@ namespace ProxySwitcher.Actions.DefaultActions
             get { return new Guid("38F54865-A9E8-4787-87BF-DCB60A26F863"); }
         }
 
+        public IList<KeyValuePair<int, string>> GetWindowStyles()
+        {
+            return new List<KeyValuePair<int, string>> {
+                new KeyValuePair<int, string>((int)ProcessWindowStyle.Normal, DefaultResources.ExecuteScript_Window_Normal),
+                new KeyValuePair<int, string>((int)ProcessWindowStyle.Minimized, DefaultResources.ExecuteScript_Window_Minimized),
+                new KeyValuePair<int, string>((int)ProcessWindowStyle.Maximized, DefaultResources.ExecuteScript_Window_Maximized),
+                new KeyValuePair<int, string>((int)ProcessWindowStyle.Hidden, DefaultResources.ExecuteScript_Window_Hidden),
+            };
+        }
+
+        public KeyValuePair<int, string> GetActiveWindowStyle(Guid networkId)
+        {
+            int windowStyle = (int)ProcessWindowStyle.Normal;
+            int.TryParse(this.Settings[networkId.ToString() + "_ScriptWindowStyle"], out windowStyle);
+
+            foreach(KeyValuePair<int, string> item in this.GetWindowStyles())
+            {
+                if (item.Key == windowStyle)
+                    return item;
+            }
+
+            return this.GetWindowStyles().First();
+        }
+
         public override UserControl GetWindowControl(Guid networkId, string networkName)
         {
             string script = this.Settings[networkId.ToString() + "_ScriptPath"];
@@ -59,12 +83,13 @@ namespace ProxySwitcher.Actions.DefaultActions
             }
         }
 
-        internal void Save(Guid networkId, string script, bool withParameter, bool withParameterNameInsteadOfId, bool runAsAdmin)
+        internal void Save(Guid networkId, string script, bool withParameter, bool withParameterNameInsteadOfId, bool runAsAdmin, int windowStyle)
         {
             this.Settings[networkId.ToString() + "_ScriptPath"] = script;
             this.Settings[networkId.ToString() + "_ScriptWithParameter"] = withParameter.ToString();
             this.Settings[networkId.ToString() + "_ScriptWithParameterName"] = withParameterNameInsteadOfId.ToString();
             this.Settings[networkId.ToString() + "_ScriptAsAdmin"] = runAsAdmin.ToString();
+            this.Settings[networkId.ToString() + "_ScriptWindowStyle"] = windowStyle.ToString();
 
             OnSettingsChanged();
 
@@ -84,6 +109,9 @@ namespace ProxySwitcher.Actions.DefaultActions
             bool asAdmin = false;
             bool.TryParse(this.Settings[networkId.ToString() + "_ScriptAsAdmin"], out asAdmin);
 
+            int windowStyle = (int)ProcessWindowStyle.Normal;
+            int.TryParse(this.Settings[networkId.ToString() + "_ScriptWindowStyle"], out windowStyle);
+
             ProcessStartInfo startInfo = new ProcessStartInfo(Environment.ExpandEnvironmentVariables(script));
 
             if (withParameter)
@@ -99,6 +127,8 @@ namespace ProxySwitcher.Actions.DefaultActions
 
             if (asAdmin)
                 startInfo.Verb = "runas";
+
+            startInfo.WindowStyle = (ProcessWindowStyle)windowStyle;
 
             Process.Start(startInfo);
         }
