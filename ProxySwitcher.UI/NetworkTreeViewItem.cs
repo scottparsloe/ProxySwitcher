@@ -37,14 +37,14 @@ namespace ProxySwitcher.UI
             StackPanel pan = new StackPanel();
 
             string blank = string.Empty;
-            if (!String.IsNullOrEmpty(this.NetworkConfiguration.IconPath) && System.IO.File.Exists(this.NetworkConfiguration.IconPath))
+            if (!String.IsNullOrEmpty(this.NetworkConfiguration.IconPath))
             {
                 pan.Orientation = Orientation.Horizontal;
                 Image image = new Image();
                 image.Height = 16;
-                image.Source = new BitmapImage(new Uri(this.NetworkConfiguration.IconPath));
+                image.Source = new BitmapImage(new Uri(this.NetworkConfiguration.IconPath, UriKind.RelativeOrAbsolute));
                 pan.Children.Add(image);
-                blank = "  ";
+                blank = " ";
             }
 
             pan.Children.Add(new TextBlock(new Run(blank + this.NetworkConfiguration.Name)));
