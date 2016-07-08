@@ -16,6 +16,7 @@ using ProxySwitcher.Common;
 using ProxySwitcher.Core;
 using ProxySwitcher.Core.Resources;
 using ProxySwitcher.UI;
+using System.Configuration;
 
 namespace ProxySwitcher
 {
@@ -523,17 +524,41 @@ namespace ProxySwitcher
                 AddActionDropDownGallery.Items.Add(rb);
             }
 
-            // Find more Action AddIns Button
-            var button = new Fluent.Button();
-            button.Click += new RoutedEventHandler(FindMoreAddInsClick);
-            button.Header = LanguageResources.FindMoreActions_Button;
-            button.LargeIcon = new BitmapImage(new Uri(@"pack://application:,,,/Images/findmore.png", UriKind.RelativeOrAbsolute));
-            AddActionDropDownGallery.Items.Add(button);
+            if (GetFindMoreAddInsUrl() != null)
+            {
+                // Find more Action AddIns Button
+                var button = new Fluent.Button();
+                button.Click += new RoutedEventHandler(FindMoreAddInsClick);
+                button.Header = LanguageResources.FindMoreActions_Button;
+                button.LargeIcon = new BitmapImage(new Uri(@"pack://application:,,,/Images/findmore.png", UriKind.RelativeOrAbsolute));
+                AddActionDropDownGallery.Items.Add(button);
+            }
+
+            AddActionDropDownButton.IsEnabled = AddActionDropDownGallery.Items.Count > 0;
+        }
+
+        private Uri GetFindMoreAddInsUrl()
+        {
+            try
+            {
+                return new Uri(ConfigurationManager.AppSettings["FindMoreAddInsUrl"]);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private void FindMoreAddInsClick(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://projects2.mwiedemeyer.de/ProxySwitcher/SitePages/MoreAddIns.aspx");
+            if (GetFindMoreAddInsUrl() != null)
+            {
+                Process.Start(GetFindMoreAddInsUrl().AbsoluteUri);
+            }
+            else
+            {
+                MessageBox.Show("No website has been configured for listing additional addins.", "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void InitTaskbarIconAndContextMenu()
