@@ -29,8 +29,7 @@ namespace ProxySwitcher.UI
                 }
             }
 
-            if (!this.NetworkConfiguration.Active)
-                this.FontStyle = FontStyles.Italic;
+            this.Opacity = (IsActive) ? 1 : 0.5;          
         }
 
         private object CreateHeader()
