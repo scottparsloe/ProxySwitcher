@@ -717,7 +717,7 @@ namespace ProxySwitcher
             CheckForUpdatesButton.Header = LanguageResources.UpdateInProgress_Button;
             CheckForUpdatesButton.IsEnabled = false;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object state)
+            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
             {
                 Thread.Sleep(3000);
 
@@ -902,5 +902,25 @@ namespace ProxySwitcher
         }
 
         #endregion
+
+        private void RibbonWindow_MinMax(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (ribbon1.IsMinimized)
+            {
+                groupBoxNetworks.Margin = new Thickness(groupBoxNetworks.Margin.Left, ribbon1.Height - ribbon1.Tabs.First().Groups.First().Height, groupBoxNetworks.Margin.Right, groupBoxNetworks.Margin.Bottom);
+                groupBoxNetworks.Height += ribbon1.Tabs.First().Groups.First().Height;
+
+                groupBoxConfig.Margin = new Thickness(groupBoxConfig.Margin.Left, ribbon1.Height - ribbon1.Tabs.First().Groups.First().Height, groupBoxConfig.Margin.Right, groupBoxConfig.Margin.Bottom);
+                groupBoxConfig.Height += ribbon1.Tabs.First().Groups.First().Height;
+            }
+            else
+            {
+                groupBoxNetworks.Margin = new Thickness(groupBoxNetworks.Margin.Left, ribbon1.Height, groupBoxNetworks.Margin.Right, groupBoxNetworks.Margin.Bottom);
+                groupBoxNetworks.Height -= ribbon1.Tabs.First().Groups.First().Height;
+
+                groupBoxConfig.Margin = new Thickness(groupBoxConfig.Margin.Left, ribbon1.Height, groupBoxConfig.Margin.Right, groupBoxConfig.Margin.Bottom);
+                groupBoxConfig.Height -= ribbon1.Tabs.First().Groups.First().Height;
+            }
+        }
     }
 }
