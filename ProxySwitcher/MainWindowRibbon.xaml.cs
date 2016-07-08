@@ -32,6 +32,7 @@ namespace ProxySwitcher
         private PSPolicy policy;
         private TaskbarIcon taskbarIcon;
         private bool shutdownInitiatedFromApplication;
+        private bool appInitialised = false;
         Windows7Helper win7Helper = new Windows7Helper(App.Current);
 
         public NetworkManager NetworkManager
@@ -89,6 +90,8 @@ namespace ProxySwitcher
                 InitActions();
 
                 UpdateJumplist();
+
+                this.appInitialised = true;
             }
             catch (AddInLoaderException)
             {
@@ -212,16 +215,19 @@ namespace ProxySwitcher
         {
             this.Dispatcher.BeginInvoke(new Action(delegate
             {
+                SetRedetectionButtonState(false);
                 switch (e.Status)
                 {
                     case NetworkChangeStatus.Detecting:
                         SetStatus(LanguageResources.Status_Detecting);
                         break;
                     case NetworkChangeStatus.Completed:
+                        SetRedetectionButtonState(true);
                         if (labelAboutStatus.Tag == null || String.IsNullOrEmpty(labelAboutStatus.Tag.ToString()) || labelAboutStatus.Tag.ToString() != "FROM_ACTION")
                             SetStatus(LanguageResources.Status_Ready);
                         break;
                     case NetworkChangeStatus.Error:
+                        SetRedetectionButtonState(true);
                         SetStatus(LanguageResources.Status_DetectionFailed);
                         break;
                 }
@@ -272,18 +278,30 @@ namespace ProxySwitcher
 
         private void treeViewNetworks_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            AddActionDropDownButton.IsEnabled = false;
+            ButtonDeleteNetwork.IsEnabled = false;
+            ButtonDeleteAction.IsEnabled = false;
+
             if (treeViewNetworks.SelectedItem is UnknownNetworkTreeViewItem)
             {
+                AddActionDropDownButton.IsEnabled = AddActionDropDownGallery.Items.Count > 0;
+
                 SetContentControl(Environment.NewLine + Environment.NewLine + "\t" + LanguageResources.UnknownNetworkDescription);
             }
             else if (treeViewNetworks.SelectedItem is NetworkTreeViewItem)
             {
+                AddActionDropDownButton.IsEnabled = AddActionDropDownGallery.Items.Count > 0;
+                ButtonDeleteNetwork.IsEnabled = true;
+
                 var item = treeViewNetworks.SelectedItem as NetworkTreeViewItem;
 
                 SetContentControl(new NetworkConfigurationControl(item.NetworkConfiguration));
             }
             else if (treeViewNetworks.SelectedItem is ActionTreeViewItem)
             {
+                AddActionDropDownButton.IsEnabled = AddActionDropDownGallery.Items.Count > 0;
+                ButtonDeleteAction.IsEnabled = true;
+
                 var item = treeViewNetworks.SelectedItem as ActionTreeViewItem;
 
                 var action = this.addInManager.GetActionById(item.ActionId);
@@ -485,6 +503,14 @@ namespace ProxySwitcher
             }
         }
 
+        private void SetRedetectionButtonState(bool enabled)
+        {
+            if (!appInitialised)
+                return;
+
+            this.ButtonRedetectNetwork.IsEnabled = enabled;
+        }
+
         private void LoadSettingsInContentPanel()
         {
             SetContentControl(new SettingsConfigurationControl(this));
@@ -534,7 +560,7 @@ namespace ProxySwitcher
                 AddActionDropDownGallery.Items.Add(button);
             }
 
-            AddActionDropDownButton.IsEnabled = AddActionDropDownGallery.Items.Count > 0;
+            AddActionDropDownButton.IsEnabled = false;
         }
 
         private Uri GetFindMoreAddInsUrl()

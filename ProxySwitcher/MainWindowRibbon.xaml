@@ -26,16 +26,16 @@
             <my:RibbonTabItem IsOpen="True" Header="{x:Static res:LanguageResources.Home_Tab}">
                 <my:RibbonGroupBox Header="{x:Static res:LanguageResources.Networks_Label}">
                     <my:Button Name="ButtonNewNetwork" Header="{x:Static res:LanguageResources.NewNetwork_Button}"  LargeIcon="/ProxySwitcher;component/Images/newnetwork.png" Click="Button_Click" Tag="New"></my:Button>
-                    <my:Button Name="ButtonDeleteNetwork" Header="{x:Static res:LanguageResources.DeleteNetwork_Button}" LargeIcon="/ProxySwitcher;component/Images/delete.png" Click="Button_Click" Tag="DeleteNetwork"></my:Button>
+                    <my:Button Name="ButtonDeleteNetwork" Header="{x:Static res:LanguageResources.DeleteNetwork_Button}" LargeIcon="/ProxySwitcher;component/Images/delete.png" Click="Button_Click" Tag="DeleteNetwork" IsEnabled="False"></my:Button>
                 </my:RibbonGroupBox>
                 <my:RibbonGroupBox Header="{x:Static res:LanguageResources.Actions_Label}">
-                    <my:DropDownButton Name="AddActionDropDownButton"  Header="{x:Static res:LanguageResources.AddAction_Button}" LargeIcon="/ProxySwitcher;component/Images/addaction.png">
+                    <my:DropDownButton Name="AddActionDropDownButton"  Header="{x:Static res:LanguageResources.AddAction_Button}" LargeIcon="/ProxySwitcher;component/Images/addaction.png" IsEnabled="False">
                         <my:Gallery Name="AddActionDropDownGallery" MaxItemsInRow="7" MinItemsInRow="6" Orientation="Horizontal"></my:Gallery>
                     </my:DropDownButton>
-                    <my:Button Name="ButtonDeleteAction" Header="{x:Static res:LanguageResources.DeleteAction_Button}" LargeIcon="/ProxySwitcher;component/Images/delete.png" Click="Button_Click" Tag="DeleteAction"></my:Button>
+                    <my:Button Name="ButtonDeleteAction" Header="{x:Static res:LanguageResources.DeleteAction_Button}" LargeIcon="/ProxySwitcher;component/Images/delete.png" Click="Button_Click" Tag="DeleteAction" IsEnabled="False"></my:Button>
                 </my:RibbonGroupBox>
                 <my:RibbonGroupBox Header="{x:Static res:LanguageResources.Application_Label}">
-                    <my:Button Name="ButtonRedetectNetwork" Header="{x:Static res:LanguageResources.ReDetect_Menu}" LargeIcon="/ProxySwitcher;component/Images/refresh.png" Click="Button_Click" Tag="RedetectNetwork"></my:Button>
+                    <my:Button Name="ButtonRedetectNetwork" Header="{x:Static res:LanguageResources.ReDetect_Menu}" LargeIcon="/ProxySwitcher;component/Images/refresh.png" Click="Button_Click" Tag="RedetectNetwork" IsEnabled="False"></my:Button>
                 </my:RibbonGroupBox>
             </my:RibbonTabItem>
             <my:RibbonTabItem Header="{x:Static res:LanguageResources.Settings_Tab}">
