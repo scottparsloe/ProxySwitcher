@@ -37,7 +37,7 @@ namespace ProxySwitcher.Actions.DefaultActions
             get { return new Guid("38F54865-A9E8-4787-87BF-DCB60A26F863"); }
         }
 
-        public IList<KeyValuePair<int, string>> GetWindowStyles()
+        public IList<KeyValuePair<int, string>> GetWindowStyleItems()
         {
             return new List<KeyValuePair<int, string>> {
                 new KeyValuePair<int, string>((int)ProcessWindowStyle.Normal, DefaultResources.ExecuteScript_Window_Normal),
@@ -47,19 +47,30 @@ namespace ProxySwitcher.Actions.DefaultActions
             };
         }
 
-        public KeyValuePair<int, string> GetActiveWindowStyle(Guid networkId)
+        public KeyValuePair<int, string> GetWindowStyleItem(int windowStyle)
         {
-            int windowStyle = (int)ProcessWindowStyle.Normal;
-            int.TryParse(this.Settings[networkId.ToString() + "_ScriptWindowStyle"], out windowStyle);
-
-            foreach(KeyValuePair<int, string> item in this.GetWindowStyles())
+            foreach (KeyValuePair<int, string> item in this.GetWindowStyleItems())
             {
                 if (item.Key == windowStyle)
                     return item;
             }
 
-            return this.GetWindowStyles().First();
+            return this.GetDefaultWindowStyleItem();
         }
+
+        public KeyValuePair<int, string> GetActiveWindowStyleItem(Guid networkId)
+        {
+            int windowStyle = (int)ProcessWindowStyle.Normal;
+            int.TryParse(this.Settings[networkId.ToString() + "_ScriptWindowStyle"], out windowStyle);
+
+            return this.GetWindowStyleItem(windowStyle);
+        }
+
+        public KeyValuePair<int, string> GetDefaultWindowStyleItem()
+        {
+            return this.GetWindowStyleItems().First();
+        }
+
 
         public override UserControl GetWindowControl(Guid networkId, string networkName)
         {
@@ -79,7 +90,10 @@ namespace ProxySwitcher.Actions.DefaultActions
                 bool asAdmin = false;
                 bool.TryParse(this.Settings[networkId.ToString() + "_ScriptAsAdmin"], out asAdmin);
 
-                return new ExecuteScript.ExecuteScriptSetup(this, networkId, networkName, script, withParameter, withParameterNameInsteadOfId, asAdmin);
+                int windowStyle = (int)ProcessWindowStyle.Normal;
+                int.TryParse(this.Settings[networkId.ToString() + "_ScriptWindowStyle"], out windowStyle);
+
+                return new ExecuteScript.ExecuteScriptSetup(this, networkId, networkName, script, withParameter, withParameterNameInsteadOfId, asAdmin, windowStyle);
             }
         }
 

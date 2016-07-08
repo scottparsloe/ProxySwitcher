@@ -30,7 +30,7 @@ namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
             InitializeComponent();
         }
 
-        public ExecuteScriptSetup(ExecuteScriptAction executeScriptAction, Guid networkId, string networkName, string script, bool withParameter, bool withParameterNameInsteadOfId, bool runAsAdmin)
+        public ExecuteScriptSetup(ExecuteScriptAction executeScriptAction, Guid networkId, string networkName, string script, bool withParameter, bool withParameterNameInsteadOfId, bool runAsAdmin, int windowStyle)
             : this()
         {
             this.executeScriptAction = executeScriptAction;
@@ -44,8 +44,8 @@ namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
 
             comboBoxWindow.DisplayMemberPath = "Value";
             comboBoxWindow.SelectedValuePath = "Value";
-            comboBoxWindow.ItemsSource = executeScriptAction.GetWindowStyles();
-            comboBoxWindow.SelectedItem = executeScriptAction.GetActiveWindowStyle(networkId);
+            comboBoxWindow.ItemsSource = executeScriptAction.GetWindowStyleItems();
+            comboBoxWindow.SelectedItem = executeScriptAction.GetWindowStyleItem(windowStyle);
 
             UpdateExampleText();
         }
@@ -56,6 +56,11 @@ namespace ProxySwitcher.Actions.DefaultActions.ExecuteScript
             this.executeScriptAction = executeScriptAction;
             this.networkId = networkId;
             this.networkName = networkName;
+
+            comboBoxWindow.DisplayMemberPath = "Value";
+            comboBoxWindow.SelectedValuePath = "Value";
+            comboBoxWindow.ItemsSource = executeScriptAction.GetWindowStyleItems();
+            comboBoxWindow.SelectedItem = executeScriptAction.GetDefaultWindowStyleItem();
 
             UpdateExampleText();
         }
